@@ -1,0 +1,134 @@
+"x","y"
+"Bedroom 2",
+<Point x="231" y="14" />
+<Point x="301" y="14" />
+<Point x="301" y="147" />
+<Point x="332" y="162" />
+<Point x="290" y="235" />
+<Point x="151" y="155" />
+"Center",
+<Point x="237" y="94" />
+"Closet Bedroom 2",
+<Point x="147" y="162" />
+<Point x="246" y="218" />
+<Point x="235" y="239" />
+<Point x="138" y="181" />
+"Center",
+<Point x="200" y="189" />
+"Master Bedroom",
+<Point x="338" y="16" />
+<Point x="517" y="15" />
+<Point x="518" y="184" />
+<Point x="382" y="184" />
+<Point x="339" y="161" />
+"Center",
+<Point x="425" y="117" />
+"Master Bedroom Bathroom",
+<Point x="411" y="192" />
+<Point x="517" y="192" />
+<Point x="519" y="265" />
+<Point x="412" y="264" />
+<Point x="411" y="192" />
+"Center",
+<Point x="472" y="217" />
+"Master Bedroom Closet 1",
+<Point x="308" y="15" />
+<Point x="333" y="15" />
+<Point x="333" y="77" />
+<Point x="308" y="78" />
+"Center",
+<Point x="338" y="42" />
+"Master Bedroom Closet 2",
+<Point x="309" y="86" />
+<Point x="336" y="87" />
+<Point x="333" y="156" />
+<Point x="309" y="142" />
+"Center",
+<Point x="338" y="117" />
+"Corridor Closet 1",
+<Point x="384" y="192" />
+<Point x="404" y="192" />
+<Point x="404" y="264" />
+<Point x="385" y="264" />
+"Center",
+<Point x="380" y="227" />
+"AC",
+<Point x="252" y="222" />
+<Point x="286" y="241" />
+<Point x="258" y="291" />
+<Point x="221" y="271" />
+"Center",
+<Point x="275" y="268" />
+"Master Toilet",
+<Point x="132" y="189" />
+<Point x="231" y="245" />
+<Point x="213" y="273" />
+<Point x="254" y="296" />
+<Point x="227" y="344" />
+<Point x="89" y="263" />
+"Center",
+<Point x="168" y="269" />
+"Kitchen",
+<Point x="365" y="273" />
+<Point x="518" y="272" />
+<Point x="518" y="402" />
+<Point x="454" y="402" />
+<Point x="330" y="330" />
+"Center",
+<Point x="437" y="351" />
+"Corridor Closet 2",
+<Point x="388" y="374" />
+<Point x="446" y="405" />
+<Point x="408" y="469" />
+<Point x="399" y="465" />
+<Point x="380" y="387" />
+"Center",
+<Point x="386" y="424" />
+"Corridor Closet 3",
+<Point x="317" y="509" />
+<Point x="369" y="538" />
+<Point x="345" y="582" />
+<Point x="306" y="592" />
+<Point x="280" y="576" />
+"Center",
+<Point x="345" y="241" />
+"Corridor",
+<Point x="337" y="168" />
+<Point x="378" y="190" />
+<Point x="387" y="263" />
+<Point x="360" y="265" />
+<Point x="322" y="333" />
+<Point x="382" y="370" />
+<Point x="373" y="386" />
+<Point x="395" y="470" />
+<Point x="405" y="476" />
+<Point x="373" y="532" />
+<Point x="321" y="503" />
+<Point x="327" y="492" />
+<Point x="300" y="387" />
+<Point x="232" y="347" />
+"Center",
+<Point x="288" y="331" />
+"Sitting Room 1",
+<Point x="81" y="227" />
+<Point x="167" y="325" />
+<Point x="84" y="463" />
+<Point x="22" y="248" />
+<Point x="13" y="393" />
+"Center",
+<Point x="83" y="369" />
+"Sitting Room 2",
+<Point x="167" y="325" />
+<Point x="297" y="400" />
+<Point x="320" y="491" />
+<Point x="273" y="572" />
+<Point x="84" y="463" />
+"Center",
+<Point x="214" y="456" />
+"Sitting Room 3",
+<Point x="84" y="463" />
+<Point x="252" y="560" />
+<Point x="217" y="622" />
+<Point x="50" y="525" />
+"Center",
+<Point x="147" y="538" />

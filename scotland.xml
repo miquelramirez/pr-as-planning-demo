@@ -1,0 +1,387 @@
+<?xml version="1.0" ?>
+<Home name="Scotland">
+	<Floorplan path="homes/scotland-floorplan-quarter-size.png" />
+	<InitialAgentLocation name="Sitting_Room_2" />
+	<Items>
+		<Item name="Knife">
+			<Location name="Kitchen" />
+		</Item>
+		<Item name="Cornish_Trilogy" >
+			<Location name="Sitting_Room_1" />
+		</Item>
+		<Item name="Cake">
+			<Location name="Kitchen" />
+		</Item>
+		<Item name="Soap_1">
+			<Location name="Master_Toilet" />
+		</Item>
+		<Item name="Soap_2">
+			<Location name="Master_Bedroom_Bathroom" />
+		</Item>
+	</Items>
+	<StageProps>
+		<Prop name="TV_Set">
+			<Location name="Sitting_Room_2" />
+			<Properties>
+				<Property name="on" />
+			</Properties>
+			<Actions>
+				<Action name="Turn_On" />
+				<Action name="Turn_Off" />
+			</Actions>
+		</Prop>
+		<Prop name="Stereo">
+			<Location name="Sitting_Room_2" />
+			<Properties>
+			</Properties>
+			<Actions>
+				<Action name="Turn_On" />
+				<Action name="Turn_Off" />
+			</Actions>
+		</Prop>
+		<Prop name="Microwave_Oven">
+			<Location name="Kitchen" />
+			<Properties>
+				<Property name="on" />
+			</Properties>
+			<Actions>
+				<Action name="Turn_On" />
+				<Action name="Turn_Off" />
+			</Actions>
+		</Prop>
+		<Prop name="Bed_1" >
+			<Location name="Master_Bedroom" />
+			<Properties>
+				<Property name="lying" />
+			</Properties>
+			<Actions>
+				<Action name="Lie_Down" />
+				<Action name="Get_Up" />
+			</Actions>
+		</Prop>
+		<Prop name="Couch_1" >
+			<Location name="Sitting_Room_2" />
+			<Properties>
+				<Property name="sitting" />
+			</Properties>
+			<Actions>
+				<Action name="Sit_Down" />
+				<Action name="Get_Up" />
+			</Actions>
+		</Prop>
+		<Prop name="Sofa" >
+			<Location name="Sitting_Room_3" />
+			<Properties>
+				<Property name="sitting" />
+			</Properties>
+			<Actions>
+				<Action name="Sit_Down" />
+				<Action name="Get_Up" />
+			</Actions>
+		</Prop>
+
+	</StageProps>
+	<Rooms>
+		<Room name="Bedroom_2"> 
+			<Geometry>
+				<Point x="231" y="14" />
+				<Point x="301" y="14" />
+				<Point x="301" y="147" />
+				<Point x="332" y="162" />
+				<Point x="290" y="235" />
+				<Point x="151" y="155" />
+			</Geometry><Point x="147" y="538" />
+			<Center>
+				<Point x="237" y="94" />
+			</Center>
+			<Connections>
+				<Room name="Closet_Bedroom_2" door="Closet_Bedroom_2_Door" />
+				<Room name="Corridor_1" door="Bedroom_2_Door" />
+			</Connections>
+		</Room>
+		<Room name="Closet_Bedroom_2">
+			<Geometry>
+				<Point x="147" y="162" />
+				<Point x="246" y="218" />
+				<Point x="235" y="239" />
+				<Point x="135" y="182" />
+			</Geometry>
+			<Center>
+				<Point x="200" y="189" />
+			</Center>
+			<Connections>
+				<Room name="Bedroom_2" door="Closet_Bedroom_2_Door" />
+			</Connections>
+
+		</Room>
+		<Room name="Master_Bedroom">
+			<Geometry>
+				<Point x="338" y="16" />
+				<Point x="517" y="15" />
+				<Point x="518" y="184" />
+				<Point x="382" y="184" />
+				<Point x="339" y="161" />
+			</Geometry>
+			<Center>
+				<Point x="425" y="117" />
+			</Center>
+			<Connections>
+				<Room name="Corridor_1" door="Master_Bedroom_Door" />
+				<Room name="Master_Bedroom_Closet_1" door="Master_Bedroom_Closet_1_Door" />
+				<Room name="Master_Bedroom_Closet_2" door="Master_Bedroom_Closet_2_Door" />
+				<Room name="Master_Bedroom_Bathroom" door="Master_Bedroom_Bathroom_Door" />
+			</Connections>
+		</Room>
+		<Room name="Master_Bedroom_Bathroom">
+			<Geometry>
+				<Point x="411" y="192" />
+				<Point x="518" y="192" />
+				<Point x="518" y="264" />
+				<Point x="411" y="264" />
+			</Geometry>
+			<Center>
+				<Point x="472" y="217" />
+			</Center>
+			<Connections>
+				<Room name="Master_Bedroom" door="Master_Bedroom_Bathroom_Door" />
+			</Connections>
+		</Room>
+		<Room name="Master_Bedroom_Closet_1">
+			<Geometry>
+				<Point x="309" y="16" />
+				<Point x="333" y="16" />
+				<Point x="333" y="78" />
+				<Point x="309" y="78" />
+			</Geometry>
+			<Center>
+				<Point x="338" y="42" />
+			</Center>
+			<Connections>
+				<Room name="Master_Bedroom" door="Master_Bedroom_Closet_1_Door" />
+			</Connections>
+		</Room>
+		<Room name="Master_Bedroom_Closet_2">
+			<Geometry>
+				<Point x="309" y="86" />
+				<Point x="333" y="86" />
+				<Point x="333" y="156" />
+				<Point x="309" y="142" />
+			</Geometry>
+			<Center>
+				<Point x="338" y="117" />
+			</Center>
+			<Connections>
+				<Room name="Master_Bedroom" door="Master_Bedroom_Closet_2_Door" />
+			</Connections>
+		</Room>
+		<Room name="Corridor_Closet_1">
+			<Geometry>
+				<Point x="385" y="192" />
+				<Point x="404" y="192" />
+				<Point x="404" y="264" />
+				<Point x="385" y="264" />
+			</Geometry>
+			<Center>
+				<Point x="380" y="227" />
+			</Center>
+			<Connections>
+				<Room name="Corridor_1" door="Corridor_Closet_1_Door" />
+			</Connections>
+		</Room>
+		<Room name="AC">
+			<Geometry>
+				<Point x="252" y="222" />
+				<Point x="286" y="241" />
+				<Point x="258" y="291" />
+				<Point x="221" y="271" />
+			</Geometry>
+			<Center>
+				<Point x="275" y="268" />
+			</Center>
+			<Connections>
+				<Room name="Corridor_2" door="AC_Door" />
+			</Connections>
+		</Room>
+		<Room name="Master_Toilet">
+			<Geometry>
+				<Point x="132" y="189" />
+				<Point x="231" y="245" />
+				<Point x="213" y="273" />
+				<Point x="254" y="296" />
+				<Point x="227" y="344" />
+				<Point x="89" y="263" />
+			</Geometry>
+			<Center>
+				<Point x="168" y="269" />
+			</Center>
+			<Connections>
+				<Room name="Corridor_2" door="Master_Toilet_Door" />
+			</Connections>
+		</Room>
+		<Room name="Kitchen">
+			<Geometry>
+				<Point x="365" y="273" />
+				<Point x="518" y="272" />
+				<Point x="518" y="402" />
+				<Point x="454" y="402" />
+				<Point x="330" y="330" />
+			</Geometry>
+			<Center>
+				<Point x="437" y="351" />
+			</Center>
+			<Connections>
+				<Room name="Corridor_3" door="Kitchen_Door" />
+			</Connections>
+		</Room>
+		<Room name="Corridor_Closet_2">
+			<Geometry>
+				<Point x="388" y="373" />
+				<Point x="446" y="405" />
+				<Point x="408" y="469" />
+				<Point x="399" y="465" />
+				<Point x="380" y="387" />
+			</Geometry>
+			<Center>
+				<Point x="386" y="424" />
+			</Center>
+			<Connections>
+				<Room name="Corridor_3" door="Corridor_Closet_2_Door" />
+			</Connections>
+		</Room>
+		<Room name="Corridor_Closet_3">
+			<Geometry>
+				<Point x="317" y="509" />
+				<Point x="369" y="538" />
+				<Point x="345" y="582" />
+				<Point x="306" y="592" />
+				<Point x="280" y="576" />
+			</Geometry>
+			<Center>
+				<Point x="345" y="241" />
+			</Center>
+			<Connections>
+				<Room name="Corridor_3" door="Corridor_Closet_3_Door" />
+			</Connections>
+		</Room>
+		<Room name="Corridor_1">
+			<Geometry>
+				<Point x="337" y="166" />
+				<Point x="379" y="190" />
+				<Point x="378" y="264" />
+				<Point x="361" y="266" />
+				<Point x="299" y="233" />
+			</Geometry>
+			<Center>
+				<Point x="341" y="220" />
+			</Center>
+			<Connections>
+				<Room name="Bedroom_2" door="Bedroom_2_Door" />
+				<Room name="Master_Bedroom" door="Master_Bedroom_Door" />
+				<Room name="Corridor_Closet_1" door="Corridor_Closet_1_Door" />
+				<Room name="Corridor_2" />
+			</Connections>
+		</Room>
+		<Room name="Corridor_2">
+			<Geometry>
+				<Point x="299" y="233" />
+				<Point x="359" y="266" />
+				<Point x="291" y="383" />
+				<Point x="231" y="348" />
+			</Geometry>
+			<Center>
+				<Point x="289" y="319" />
+			</Center>
+			<Connections>
+				<Room name="AC" door="AC_Door" />
+				<Room name="Master_Toilet" door="Master_Toilet_Door" />
+				<Room name="Corridor_1" />
+				<Room name="Corridor_3" />
+			</Connections>
+		</Room>
+		<Room name="Corridor_3">
+			<Geometry>
+				<Point x="291" y="383" />
+				<Point x="322" y="334" />
+				<Point x="383" y="369" />
+				<Point x="373" y="386" />
+				<Point x="395" y="470" />
+				<Point x="405" y="476" />
+				<Point x="373" y="532" />
+				<Point x="321" y="503" />
+				<Point x="327" y="492" />
+				<Point x="300" y="387" />				
+			</Geometry>
+			<Center>
+				<Point x="346" y="420" />
+			</Center>
+			<Connections>
+				<Room name="Corridor_2" />
+				<Room name="Kitchen" door="Kitchen_Door" />
+				<Room name="Corridor_Closet_2" door="Corridor_Closet_2_Door" />
+				<Room name="Corridor_Closet_3" door="Corridor_Closet_3_Door" />
+				<Room name="Sitting_Room_2" door="Sitting_Room_Door" />
+			</Connections>
+		</Room>
+		<Room name="Sitting_Room_1">
+			<Geometry>
+				<Point x="81" y="276" />
+				<Point x="167" y="325" />
+				<Point x="84" y="463" />
+				<Point x="21" y="427" />
+				<Point x="13" y="393" />
+			</Geometry>
+			<Center>
+				<Point x="83" y="369" />
+			</Center>
+			<Connections>
+				<Room name="Sitting_Room_2" />
+			</Connections>
+		</Room>
+		<Room name="Sitting_Room_2">
+			<Geometry>
+				<Point x="167" y="325" />
+				<Point x="297" y="400" />
+				<Point x="320" y="491" />
+				<Point x="273" y="572" />
+				<Point x="84" y="463" />
+			</Geometry>
+			<Center>
+				<Point x="214" y="456" />
+			</Center>
+			<Connections>
+				<Room name="Corridor_3" door="Sitting_Room_Door" />
+				<Room name="Sitting_Room_1" />
+				<Room name="Sitting_Room_3" />
+			</Connections>
+		</Room>
+		<Room name="Sitting_Room_3">
+			<Geometry>
+				<Point x="84" y="463" />
+				<Point x="252" y="560" />
+				<Point x="217" y="622" />
+				<Point x="50" y="525" />
+			</Geometry>
+			<Center>
+				<Point x="147" y="538" />
+			</Center>
+			<Connections>
+				<Room name="Sitting_Room_2" />
+			</Connections>
+		</Room>
+	</Rooms>
+	<Doors>
+		<Door name="Closet_Bedroom_2_Door" open="no" />
+		<Door name="Bedroom_2_Door" open="no" />
+		<Door name="Master_Bedroom_Door" open="no" />
+		<Door name="Master_Bedroom_Closet_1_Door" open="no" />
+		<Door name="Master_Bedroom_Closet_2_Door" open="no" />
+		<Door name="Master_Bedroom_Bathroom_Door" open="no" />
+		<Door name="Corridor_Closet_1_Door" open="no" />
+		<Door name="AC_Door" open="no" />
+		<Door name="Master_Toilet_Door" open="no" />
+		<Door name="Kitchen_Door" open="no" />
+		<Door name="Corridor_Closet_2_Door" open="no" />
+		<Door name="Corridor_Closet_3_Door" open="no" />
+		<Door name="Sitting_Room_Door" open="yes" />
+	</Doors>	
+</Home>

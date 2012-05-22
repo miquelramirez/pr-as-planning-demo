@@ -1,0 +1,4 @@
+<?xml version="1.0" ?>
+<SimHomeConfig>
+	<planner type="internal" />
+</SimHomeConfig>
