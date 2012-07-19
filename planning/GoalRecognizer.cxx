@@ -161,6 +161,7 @@ void	GoalRecognizer::evaluateLikelihoods()
 {
 	std::cout << "Evaluating Goal: " << mHypGoal.name().toStdString() << std::endl;
 	printInitAndGoal( mCompliantProblem );
+	printActions( mCompliantProblem );
 	printInitAndGoal( mNotCompliantProblem );
 	assert( checkReachability( mCompliantProblem ) );
 	assert( checkReachability( mNotCompliantProblem ) );

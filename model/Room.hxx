@@ -27,6 +27,7 @@ class Door;
 class WalkTo;
 class Drop;
 class PickUp;
+class StageProp;
 
 class Room : public QObject
 {
@@ -55,6 +56,8 @@ public:
 	QVector< Drop* >&		dropActions() { return mDropActions; }
 	void				makeItemActions();
 
+	QList< StageProp* >&		props() { return mStageProps; }
+
 	void				setAgentLocation( bool v );
 	bool				isAgentHere() const { return mAgentHere; }
 	
@@ -66,6 +69,7 @@ public:
 
 	Fluent*				atFluent() 		{ return mAtFluent; }
 	QMap< QString, Fluent* >&	atItemFluents() 	{ return mAtItemFluents; }
+	QMap< QString, Fluent* >&	atPropFluents()		{ return mAtPropFluents; } 
 
 signals:
 	
@@ -93,6 +97,8 @@ protected:
 	QVector< Drop* >		mDropActions;
 	Fluent*				mAtFluent;
 	QMap< QString, Fluent* >	mAtItemFluents;
+	QList< StageProp* >		mStageProps;
+	QMap< QString, Fluent* >	mAtPropFluents;
 };
 
 }

@@ -12,6 +12,8 @@
 #include <model/Agent.hxx>
 #include <model/Item.hxx>
 #include <model/ItemManager.hxx>
+#include <model/StageProp.hxx>
+#include <model/StagePropAction.hxx>
 
 namespace Application
 {
@@ -190,6 +192,23 @@ QMenu*	Room::getActionMenu()
 	} 
 	mActionMenu->addMenu(dropMenu);
 	mActionMenu->addMenu(closeDoorMenu);
+
+	QMenu* propsMenu = new QMenu( QString( "Props Actions" ) );
+	for ( int i = 0; i < props().size(); i++ )
+	{
+		QMenu* propActionMenu = new QMenu( props()[i]->name() );
+		StageProp* prop = props()[i];
+		for (  QMap< QString, StagePropAction* >::Iterator propActionIt = prop->actions().begin();
+			propActionIt != prop->actions().end(); propActionIt++ )
+		{
+			if ( !propActionIt.value()->checkPrecondition() ) continue;
+			QAction* menuAction = propActionMenu->addAction( propActionIt.key() );
+			QObject::connect( menuAction, SIGNAL(triggered()), propActionIt.value(), SLOT(execute()) );
+		}
+		propsMenu->addMenu( propActionMenu );	
+	}
+	mActionMenu->addMenu( propsMenu );
+
 	return mActionMenu;
 }
 
@@ -202,6 +221,11 @@ void	Room::makeSTRIPSFluents( STRIPS_Problem& domain )
 	{
 		index = STRIPS_Problem::add_fluent( domain, QString( "(at %1 %2)" ).arg(name()).arg( itemList[i]->name() ).toStdString() );
 		mAtItemFluents[ itemList[i]->name() ] = domain.fluents()[index];
+	}
+	for ( int i = 0; i < mStageProps.size(); i++ )
+	{
+		index = STRIPS_Problem::add_fluent( domain, QString( "(at %1 %2)" ).arg(name()).arg( mStageProps[i]->name() ).toStdString() );
+		mAtPropFluents[ mStageProps[i]->name() ] = domain.fluents()[index];
 	}
 
 }
@@ -232,7 +256,9 @@ void	Room::evalSTRIPSFluents( aig_tk::Fluent_Vec& eval )
 	// At fluent
 	if ( isAgentHere() ) eval.push_back( atFluent()->index() );
 	for ( int k = 0; k < contents().size(); k++ )
-		eval.push_back( atItemFluents()[ contents()[k]->name() ]->index() );	
+		eval.push_back( atItemFluents()[ contents()[k]->name() ]->index() );
+	for ( int i = 0; i < mStageProps.size(); i++ )
+		eval.push_back( mAtPropFluents[ mStageProps[i]->name() ]->index() );
 }
 
 void	Room::addItem( Item* i )

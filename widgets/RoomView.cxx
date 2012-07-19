@@ -21,7 +21,7 @@ RoomView::~RoomView()
 {
 }
 
-void	RoomView::hoverEnterEvent(QGraphicsSceneHoverEvent* evt)
+void	RoomView::hoverEnterEvent(QGraphicsSceneHoverEvent* )
 {
 	QBrush brush(  QColor( 31, 200, 55, 127 ), Qt::SolidPattern );
 	setBrush( brush );
@@ -33,14 +33,14 @@ void	RoomView::hoverEnterEvent(QGraphicsSceneHoverEvent* evt)
 	setPen( pen );
 }
 
-void	RoomView::hoverLeaveEvent( QGraphicsSceneHoverEvent* evt )
+void	RoomView::hoverLeaveEvent( QGraphicsSceneHoverEvent* )
 {
 	QBrush brush( QColor( 255, 255, 255, 0 ), Qt::NoBrush );
 	setBrush( brush );
 	setPen( QPen( QColor( 255, 255, 255, 0 ) ) );
 }
 
-void	RoomView::mousePressEvent( QGraphicsSceneMouseEvent* event )
+void	RoomView::mousePressEvent( QGraphicsSceneMouseEvent* )
 {
 	std::cout << "Right button on: " << observed().name().toStdString() << std::endl;	
 }
@@ -56,7 +56,7 @@ void	RoomView::contextMenuEvent( QGraphicsSceneContextMenuEvent* evt )
 void	RoomView::setupView()
 {
 	QPolygon poly;
-	for ( unsigned k = 0; k < observed().geometry().size(); k++ )
+	for ( int k = 0; k < observed().geometry().size(); k++ )
 		poly << observed().geometry()[k];
 	setPolygon( poly );
 	setZValue( 15.0f );

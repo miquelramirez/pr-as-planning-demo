@@ -35,7 +35,7 @@ void	PickUp::execute()
 
 bool	PickUp::checkPrecondition()
 {
-	return mRoom->contents().contains( mItem );
+	return mRoom->isAgentHere() && mRoom->contents().contains( mItem );
 }
 
 void	PickUp::makeSTRIPSAction( STRIPS_Problem& p )

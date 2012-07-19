@@ -8,6 +8,7 @@
 #include <iostream>
 #include <QMap>
 #include <cstdlib>
+#include <StageProp.hxx>
 
 namespace Application
 {
@@ -22,6 +23,8 @@ Home::~Home()
 		delete mRooms[k];
 	for ( unsigned k = 0; k < mDoors.size(); k++ )
 		delete mDoors[k];
+	for ( unsigned k = 0; k < mProps.size(); k++ )
+		delete mProps[k];
 }
 
 void	Home::loadFloorPlan( QDomElement& elem )
@@ -118,6 +121,28 @@ bool	Home::load( const QString& xmlDocument, Home* obj )
         	 return false;
 	}
 
+	QDomElement propsElem = root.firstChildElement( "StageProps" );
+	
+	if ( !propsElem.isNull() )
+	{
+		QDomElement child = propsElem.firstChildElement();
+		while ( !child.isNull() )
+		{
+			if ( child.tagName() == "Prop" )
+			{
+				StageProp* p = new StageProp();
+				if ( !StageProp::load( child, p ) )
+					return false;
+				std::cout << "Stage prop found: " << p->name().toStdString() << std::endl;
+				obj->mProps.push_back( p );
+				obj->mPropsTable[ p->name() ] = p;
+			}
+			
+			child = child.nextSiblingElement();
+			
+		}
+	}
+
 	QDomElement roomsElem = root.firstChildElement( "Rooms" );
 
 	if ( roomsElem.isNull() )
@@ -171,6 +196,7 @@ bool	Home::load( const QString& xmlDocument, Home* obj )
 	}
 
 	obj->placeItems();
+	obj->placeProps();
 
 	return obj->connectRooms();
 }
@@ -191,6 +217,24 @@ void	Home::placeItems()
 		mRoomsTable[ itemList[i]->initialLocation() ]->addItem( itemList[i] );
 	}
 
+}
+
+void	Home::placeProps()
+{
+	for ( int i = 0; i < mProps.size(); i++ )
+	{
+		if ( mRoomsTable.find( mProps[i]->locationName() ) == mRoomsTable.end() )
+		{
+			QMessageBox::information( QApplication::activeWindow(), 
+					tr("Sim Home"),
+					tr("Stage Prop %1 refers to Room %2, which hasn't been found")
+					.arg( mProps[i]->name() ).arg( mProps[i]->locationName()) );
+			std::exit(1);
+			
+		}
+		mRoomsTable[ mProps[i]->locationName() ]->props().push_back( mProps[i] );
+		mProps[i]->setRoom( mRoomsTable[ mProps[i]->locationName() ] );
+	}
 }
 
 }

@@ -7,6 +7,7 @@
 #include <model/Room.hxx>
 #include <model/Door.hxx>
 #include <model/Agent.hxx>
+#include <model/StageProp.hxx>
 #include <planning/Observer.hxx>
 
 namespace Application
@@ -54,10 +55,14 @@ void	SimHome::loadHome( const QString& homePath )
 		mHome->rooms()[k]->makeSTRIPSFluents(mDomain);
 	for ( unsigned k = 0; k < mHome->doors().size(); k++ )
 		mHome->doors()[k]->makeSTRIPSFluents(mDomain);
+	for ( unsigned k = 0; k < mHome->props().size(); k++ )
+		mHome->props()[k]->makeSTRIPSFluents(mDomain);
 	for ( unsigned k = 0; k < mHome->rooms().size(); k++ )
-		mHome->rooms()[k]->makeSTRIPSActions(mDomain, mObserver );
+		mHome->rooms()[k]->makeSTRIPSActions( mDomain, mObserver );
 	for ( unsigned k = 0; k < mHome->doors().size(); k++ )
-		mHome->doors()[k]->makeSTRIPSActions(mDomain, mObserver );
+		mHome->doors()[k]->makeSTRIPSActions( mDomain, mObserver );
+	for ( unsigned k = 0; k < mHome->props().size(); k++ )
+		mHome->props()[k]->makeSTRIPSActions( mDomain, mObserver );
 
 	std::cout << "STRIPS fluents: " << mDomain.fluents().size() << std::endl;
 	std::cout << "STRIPS actions: " << mDomain.actions().size() << std::endl;

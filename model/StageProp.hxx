@@ -22,6 +22,7 @@ namespace Application
 
 class	Room;
 class	StagePropAction;
+class	Agent;
 
 class	StageProp : public QObject
 {
@@ -33,9 +34,10 @@ public:
 	bool				getProperty( QString key );
 	Fluent*				getPropertyFluent( QString key );
 
-	QVector< StagePropAction* >&	actions() { return mActions; }
-	void				setRoom( Room* r );
-	QString				locationName() { return mLocName; }
+	QMap< QString, StagePropAction* >&	actions() { return mActions; }
+	void					setRoom( Room* r );
+	QString					name() { return mName; }
+	QString					locationName() { return mLocName; }
 
 	void				makeSTRIPSFluents( STRIPS_Problem& domain );
 	void				makeSTRIPSActions( STRIPS_Problem& domain, Planning::Observer* obs );
@@ -51,9 +53,10 @@ protected:
 	QString				mName;
 	QMap< QString, bool>		mProperties;
 	QMap< QString, Fluent*> 	mPropertiesFluents;
-	QVector< StagePropAction* >	mActions;
+	QMap< QString, StagePropAction* >	mActions;
 	QVector< QString >		mActionNames;
 	QString				mLocName;
+	Room*				mLocation;
 };
 
 

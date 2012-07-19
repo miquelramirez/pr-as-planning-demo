@@ -37,13 +37,14 @@ void	WalkTo::execute()
 
 bool	WalkTo::checkPrecondition()
 {
-	return ( mDoor != NULL ? mDoor->isOpen() : true ) &&  mSource->isAgentHere();
+	return ( mDoor != NULL ? mDoor->isOpen() : true ) &&  mSource->isAgentHere() && Agent::instance().canWalk();
 }
 
 void	WalkTo::makeSTRIPSAction( STRIPS_Problem& p )
 {
 	assert( mSource->atFluent() != NULL );
 	assert( mDestination->atFluent() != NULL );
+	assert( Agent::instance().canWalkFluent() != NULL );
 	if ( mDoor != NULL )
 		assert( mDoor->openFluent() != NULL ); 
 
