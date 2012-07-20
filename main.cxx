@@ -24,6 +24,8 @@ void	wireSignalsAndSlots( Application::SimHome& appObj, UI::AppWindow& win )
 			appObj.observer(), SLOT( addNewGoal( QString, QList< QString >& ) ) );
 	QObject::connect( appObj.observer(), SIGNAL( goalViewCreated( UI::GoalView* ) ),
 				win.goalSetView(), SLOT( addNewGoalView( UI::GoalView* )  ) );
+	QObject::connect( appObj.observer(), SIGNAL( actionObserved( QString ) ), 
+				win.observationsView(), SLOT( logAction( QString ) ) );
 }
 
 int main( int argc, char** argv )

@@ -22,6 +22,7 @@ namespace UI
 class  RoomView;
 class  HomeRenderer;
 class  GoalSetView;
+class  ObservationsView;
 
 class	AppWindow : public QMainWindow
 {
@@ -30,11 +31,12 @@ public:
 	AppWindow( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
 	virtual ~AppWindow();	
 
-	QAction*	quitAction() 		{ return mQuitAction; }
-	HomeRenderer*	homeScene()  		{ return mHomeScene; }
-	QAction*	startObsAction() 	{ return mStartObsAction; }
-	QAction*	stopObsAction()		{ return mStopObsAction; }
-	GoalSetView*	goalSetView()		{ return mGoalsView; }
+	QAction*		quitAction() 		{ return mQuitAction; }
+	HomeRenderer*		homeScene()  		{ return mHomeScene; }
+	QAction*		startObsAction() 	{ return mStartObsAction; }
+	QAction*		stopObsAction()		{ return mStopObsAction; }
+	GoalSetView*		goalSetView()		{ return mGoalsView; }
+	ObservationsView*	observationsView()	{ return mObsActView; }
 
 signals:
 	void		loadHome( const QString& homeXmlPath );
@@ -55,30 +57,35 @@ protected:
 
 	void	setupWidgets();
 	void	makeWidgets();
+	void	makeWorldWidgets();
+	void	makeObserverWidgets();
 	void	makeFileMenu();
 	void	makePRMenu();
 	void	makeAboutMenu();
 
 protected:
 	// Widgets
-	QAction* 	mLoadHomeAction;
-	QAction* 	mQuitAction;
-	QWidget* 	mCentralWidget;
-	QWidget* 	mHorizontalLayoutWidget;
-	QHBoxLayout* 	mHorizontalLayout;
-	QGraphicsView*	mGraphicDisplay;
-	QMenuBar* 	mAppMenuBar;
-	QMenu*		mFileMenu;
-	QMenu*	 	mAboutMenu;
-	QStatusBar*	mStatusBar;
-	HomeRenderer*   mHomeScene;
-	QGroupBox*	mFloorPlanWidget;
-	QVBoxLayout*	mFloorPlanWidgetLayout;
-	GoalSetView*	mGoalsView;
-	QMenu*		mPRMenu;
-	QAction*	mStartObsAction;
-	QAction*	mStopObsAction;
-	QMenu*		mObsLevelMenu;
+	QAction* 		mLoadHomeAction;
+	QAction* 		mQuitAction;
+	QWidget* 		mCentralWidget;
+	QWidget*		mWorldWidget;
+	QWidget*		mObserverWidget;
+	QWidget* 		mHorizontalLayoutWidget;
+	QHBoxLayout* 		mHorizontalLayout;
+	QGraphicsView*		mGraphicDisplay;
+	QMenuBar* 		mAppMenuBar;
+	QMenu*			mFileMenu;
+	QMenu*	 		mAboutMenu;
+	QStatusBar*		mStatusBar;
+	HomeRenderer*   	mHomeScene;
+	QGroupBox*		mFloorPlanWidget;
+	QVBoxLayout*		mFloorPlanWidgetLayout;
+	GoalSetView*		mGoalsView;
+	QMenu*			mPRMenu;
+	QAction*		mStartObsAction;
+	QAction*		mStopObsAction;
+	QMenu*			mObsLevelMenu;
+	ObservationsView*	mObsActView;
 };
 
 }

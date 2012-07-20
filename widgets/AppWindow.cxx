@@ -33,7 +33,7 @@ void	AppWindow::setupWidgets()
 	// Main window
 	if ( objectName().isEmpty() )
 		setObjectName( QString::fromUtf8("ApplicationWindow") );
-	resize( 800, 600 );
+	resize( 1024, 768 );
        	setWindowTitle(QApplication::translate("ApplicationWindow", "Sim Home", 0, QApplication::UnicodeUTF8));
 
 	makeWidgets();
@@ -60,16 +60,14 @@ void	AppWindow::setupWidgets()
 	QObject::connect( mLoadHomeAction, SIGNAL(triggered()), this, SLOT(onLoadHome()) );
 }
 
-void	AppWindow::makeWidgets()
+void	AppWindow::makeWorldWidgets()
 {
-	mCentralWidget = new QWidget(this);
-        mCentralWidget->setObjectName(QString::fromUtf8("mCentralWidget"));
+	QVBoxLayout* worldLayout = new QVBoxLayout( mWorldWidget );
+	worldLayout->setObjectName(QString::fromUtf8("ObserverWidgetLayout"));
+	worldLayout->setContentsMargins( 1, 1, 1, 1 );
+	
 
-        mHorizontalLayout = new QHBoxLayout(mCentralWidget);
-        mHorizontalLayout->setObjectName(QString::fromUtf8("HorizontalLayout"));
-        mHorizontalLayout->setContentsMargins(5, 5, 5, 5);
-
-	mFloorPlanWidget = new QGroupBox("Floor Plan", mCentralWidget);	
+	mFloorPlanWidget = new QGroupBox("Floor Plan", mWorldWidget);	
 	mFloorPlanWidget->setObjectName( QString::fromUtf8("FloorPlanWidget"));
 
 	mFloorPlanWidgetLayout = new QVBoxLayout(mFloorPlanWidget);
@@ -82,12 +80,48 @@ void	AppWindow::makeWidgets()
 
 	mFloorPlanWidgetLayout->addWidget(mGraphicDisplay);
 
-	mGoalsView = new GoalSetView( "Goals", mCentralWidget );
+	worldLayout->addWidget( mFloorPlanWidget );
+}
+
+void	AppWindow::makeObserverWidgets()
+{
+	QVBoxLayout*	obsLayout = new QVBoxLayout( mObserverWidget );
+	obsLayout->setObjectName(QString::fromUtf8("ObserverWidgetLayout"));
+	obsLayout->setContentsMargins( 1, 1, 1, 1 );
+
+	mGoalsView = new GoalSetView( "Goals", mObserverWidget );
 	mGoalsView->setObjectName( QString::fromUtf8("GoalsView" ) );	
 	mGoalsView->setMinimumWidth( 300 );
 
-        mHorizontalLayout->addWidget(mFloorPlanWidget);
-	mHorizontalLayout->addWidget(mGoalsView);
+	mObsActView = new ObservationsView( "Observed Actions", mObserverWidget );
+	mObsActView->setObjectName( QString::fromUtf8( "ObservedActions" ) );
+	mObsActView->setMaximumHeight( 300 );
+	mObsActView->setMaximumWidth( 400 );
+
+	obsLayout->addWidget( mGoalsView );
+	obsLayout->addWidget( mObsActView );
+}
+
+void	AppWindow::makeWidgets()
+{
+	mCentralWidget = new QWidget(this);
+        mCentralWidget->setObjectName(QString::fromUtf8("mCentralWidget"));
+
+        mHorizontalLayout = new QHBoxLayout(mCentralWidget);
+        mHorizontalLayout->setObjectName(QString::fromUtf8("HorizontalLayout"));
+        mHorizontalLayout->setContentsMargins(5, 5, 5, 5);
+
+	mWorldWidget = new QWidget( mCentralWidget );
+	makeWorldWidgets();	
+
+	mObserverWidget = new QWidget( mCentralWidget );
+	mObserverWidget->setMinimumWidth( 400 );
+	mObserverWidget->setMaximumWidth( 400 );
+	mObserverWidget->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Expanding );
+	makeObserverWidgets();
+
+	mHorizontalLayout->addWidget( mWorldWidget );
+	mHorizontalLayout->addWidget( mObserverWidget );
 
         setCentralWidget(mCentralWidget);
 }
@@ -156,6 +190,7 @@ void	AppWindow::makePRMenu()
 	mStartObsAction->setObjectName( QString::fromUtf8("StartObserving") );
 	mStartObsAction->setText( QApplication::translate("ApplicationWindow", "Start Observing...", 0, QApplication::UnicodeUTF8 ));
 	QObject::connect( mStartObsAction, SIGNAL( triggered() ), mGoalsView, SLOT( freeze() ) );
+	QObject::connect( mStartObsAction, SIGNAL( triggered() ), mObsActView, SLOT( clearActionLog() ) ); 
 
 	mStopObsAction = new QAction( this );
 	mStopObsAction->setObjectName( QString::fromUtf8("StopObserving") );

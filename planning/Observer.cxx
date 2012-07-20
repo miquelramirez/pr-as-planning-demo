@@ -60,9 +60,10 @@ void	Observer::actionExecuted( unsigned index )
 	float rX = (float)rand()/(float)RAND_MAX;
 	
 	if ( rX >= obsLevel() ) return;
-	
+
 	aig_tk::Action*	obs = mDomain.actions()[index];
 	
+	emit actionObserved( QString( obs->signature().c_str() ) );	
 	mObservations.push_back( obs );
 	std::cout << "Observed " << obs->signature() << std::endl;
 	std::cout << "Observed so far " << std::endl;

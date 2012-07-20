@@ -20,7 +20,7 @@ GoalSetView::GoalSetView( const QString& title, QWidget* parent )
 
 GoalSetView::~GoalSetView()
 {
-	delete mViewLayout;
+	delete mGoalListLayout;
 }
 
 void	GoalSetView::freeze()
@@ -35,15 +35,22 @@ void	GoalSetView::unFreeze()
 
 void	GoalSetView::setup()
 {
-	mViewLayout = new QVBoxLayout( this ); 
-	mViewLayout->setObjectName( QString::fromUtf8("ViewLayout") );
-	mViewLayout->setContentsMargins( 10, 10, 10, 10 );
+	mViewLayout = new QVBoxLayout( this );
+	mViewLayout->setObjectName( QString::fromUtf8( "GoalSetViewLayout" ) );
+	mViewLayout->setContentsMargins( 5, 5, 5, 5 );
 
-	mGoalsArea = new QScrollArea( this );
-	mGoalsAreaLayout = new QVBoxLayout( mGoalsArea );
-	mGoalsAreaLayout->setContentsMargins( 5, 5, 5, 5 );
+	mGoalsList = new QFrame( this );
+	mGoalsList->setFrameStyle( QFrame::StyledPanel | QFrame::Plain );
+	mGoalsList->setMinimumHeight( 400 );
+	
+	mGoalsScrollingManager = new QScrollArea;
+	mGoalsScrollingManager->setWidget( mGoalsList );
 
-	mViewLayout->addWidget( mGoalsArea );
+	mGoalListLayout = new QVBoxLayout( mGoalsList );
+	mGoalListLayout->setContentsMargins( 25, 25, 25, 25 );
+
+
+	mViewLayout->addWidget( mGoalsList );
 
 	mMenu = new QMenu;
 	mCreateNewGoal = mMenu->addAction("Add New Goal...");
@@ -102,15 +109,15 @@ void	GoalSetView::removeGoalView( QString name )
 
 	v->hide();
 	v->setParent( NULL );
-	mGoalsAreaLayout->removeWidget( v );
+	mGoalListLayout->removeWidget( v );
 	
 	delete v;
 }
 
 void	GoalSetView::addNewGoalView( GoalView* v )
 {
-	v->setParent( this );	
-	mGoalsAreaLayout->addWidget( v );
+	v->setParent( mGoalsList );	
+	mGoalListLayout->addWidget( v );
 	mGoalViews.push_back( v );
 	QObject::connect( v, SIGNAL( removeGoal( QString ) ), this, SLOT( removeGoalView( QString ) ) );
 }

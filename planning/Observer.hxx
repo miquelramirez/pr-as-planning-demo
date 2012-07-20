@@ -30,6 +30,7 @@ signals:
 	void	requestInitialStateUpdate();
 	void	goalViewCreated( UI::GoalView* v );
 	void	sendHypGoalsInfo( QList< QString >&, QList< QString >& );
+	void	actionObserved( QString a );
 
 public slots:
 	void	start();

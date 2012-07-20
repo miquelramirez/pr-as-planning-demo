@@ -29,8 +29,8 @@ void 	GoalView::makeTooltip( const QStringList& list )
 void	GoalView::setupWidgets()
 {
 	setMinimumWidth( 150 );
-	setMaximumHeight( 120 );
-	setMinimumHeight( 120 );
+	setMaximumHeight( 80 );
+	setMinimumHeight( 80 );
 	setFrameStyle( QFrame::StyledPanel | QFrame::Raised );
 
 	mLayout = new QVBoxLayout( this );
@@ -40,15 +40,24 @@ void	GoalView::setupWidgets()
 	mGoalNameLabel = new QLabel( mGoalName, this );
 	mLayout->addWidget( mGoalNameLabel );
 
-	mProbDisplayLabel = new QLabel( "P(G|O)", this );
+	mProbView = new QWidget( this );
+
+	QHBoxLayout* probViewLayout = new QHBoxLayout( mProbView );
+	probViewLayout->setObjectName( QString::fromUtf8( "GoalProbLayout" ) );
+	probViewLayout->setContentsMargins( 1, 1, 1, 1 );
+
+	mProbDisplayLabel = new QLabel( "P(G|O)", mProbView );
 	mLayout->addWidget( mProbDisplayLabel );	
 
-	mProbDisplay = new QProgressBar( this );
+	mProbDisplay = new QProgressBar( mProbView );
 	mProbDisplay->setMinimum( 0 );
 	mProbDisplay->setMaximum( 100 );
 	mProbDisplay->setValue( 0 );	
 
-	mLayout->addWidget( mProbDisplay );
+	probViewLayout->addWidget( mProbDisplayLabel );
+	probViewLayout->addWidget( mProbDisplay );
+
+	mLayout->addWidget( mProbView );
 
 	mPopupMenu = new QMenu;
 	mRemoveAction = new QAction( this );

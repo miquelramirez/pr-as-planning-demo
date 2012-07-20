@@ -5,8 +5,10 @@
 #include <QVBoxLayout>
 #include <QMenu>
 #include <QList>
+#include <QFrame>
 #include <QScrollArea>
 #include <widgets/GoalView.hxx>
+#include <widgets/ObservationsView.hxx>
 
 namespace UI
 {
@@ -41,13 +43,14 @@ protected:
 	virtual void	mousePressEvent ( QMouseEvent * event );
 protected:
 
-	QVBoxLayout*		mViewLayout;
 	QMenu*			mMenu;
 	QAction*		mCreateNewGoal;
 	QAction*		mClearGoals;
 	bool			mFrozen;
-	QScrollArea*		mGoalsArea;
-	QVBoxLayout*		mGoalsAreaLayout;
+	QVBoxLayout*		mViewLayout;
+	QFrame*			mGoalsList;
+	QVBoxLayout*		mGoalListLayout;
+	QScrollArea*		mGoalsScrollingManager;
 	QList< GoalView* >	mGoalViews;
 };
 

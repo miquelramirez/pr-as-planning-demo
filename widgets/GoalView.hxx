@@ -42,6 +42,7 @@ protected:
 	QProgressBar*	mProbDisplay;
 	QMenu*		mPopupMenu;
 	QAction*	mRemoveAction;
+	QWidget*	mProbView;
 };
 
 }
