@@ -3,22 +3,22 @@
 
 #include <QObject>
 #include <planning/Goal.hxx>
-#include <planning/STRIPS_Problem.hxx>
-#include <planning/Action.hxx>
-#include <planning/Fluent.hxx>
-#include <planning/State.hxx>
-#include <planning/Conditional_Effect.hxx>
+#include <strips_prob.hxx>
+#include <action.hxx>
+#include <fluent.hxx>
+#include <strips_state.hxx>
+#include <cond_eff.hxx>
 #include <vector>
 #include <fstream>
 
-using aig_tk::STRIPS_Problem;
-using aig_tk::Action;
-using aig_tk::Fluent;
-using aig_tk::Action_Ptr_Vec;
-using aig_tk::Fluent_Vec;
-using aig_tk::Fluent_Ptr_Vec;
-using aig_tk::Conditional_Effect_Vec;
-using aig_tk::Conditional_Effect;
+using aptk::STRIPS_Problem;
+using aptk::Action;
+using aptk::Fluent;
+using aptk::Action_Ptr_Vec;
+using aptk::Fluent_Vec;
+using aptk::Fluent_Ptr_Vec;
+using aptk::Conditional_Effect_Vec;
+using aptk::Conditional_Effect;
 
 namespace Planning
 {
@@ -46,10 +46,10 @@ protected:
 	void	createObsFluents(STRIPS_Problem& prob, Fluent_Ptr_Vec& obsFluents, Fluent_Ptr_Vec& notObsFluents);
 	void	createActions( STRIPS_Problem& prob, Fluent_Ptr_Vec& obsFluents, Fluent_Ptr_Vec& notObsFluents );
 
-	float	solve( STRIPS_Problem& prob );
+	float	solve( STRIPS_Problem& prob, std::string log_file );
 
 	void	printInitAndGoal( STRIPS_Problem& p );
-	void	printState( STRIPS_Problem& p, aig_tk::State& s );
+	void	printState( STRIPS_Problem& p, aptk::State& s );
 	void	printFluentVec( STRIPS_Problem& p, Fluent_Vec& v );
 	void	printActions( STRIPS_Problem& prob );
 	void	printAction( STRIPS_Problem& prob, Action& a );
@@ -80,6 +80,8 @@ protected:
 	Fluent_Ptr_Vec	mNotObsFluentsNotComp;
 	bool		mFinishedComp;
 	bool		mFinishedNotComp;
+	std::string	mLogFileComp;
+	std::string	mLogFileNotComp;
 };
 
 }

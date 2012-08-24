@@ -4,10 +4,10 @@
 #include <QObject>
 #include <QStringList>
 #include <QString>
-#include <planning/STRIPS_Problem.hxx>
+#include <strips_prob.hxx>
 
-using aig_tk::STRIPS_Problem;
-using aig_tk::Fluent_Vec;
+using aptk::STRIPS_Problem;
+using aptk::Fluent_Vec;
 
 namespace Planning
 {

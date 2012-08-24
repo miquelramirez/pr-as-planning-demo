@@ -4,11 +4,11 @@
 #include <QObject>
 #include <QMap>
 #include <QList>
-#include <planning/STRIPS_Problem.hxx>
-#include <planning/Fluent.hxx>
+#include <strips_prob.hxx>
+#include <fluent.hxx>
 
-using aig_tk::STRIPS_Problem;
-using aig_tk::Fluent;
+using aptk::STRIPS_Problem;
+using aptk::Fluent;
 
 namespace Application
 {
@@ -29,7 +29,7 @@ public:
 	QMap<QString, Fluent*>&		carryingFluents() { return mCarryingFluents; } 
 	
 	void				makeSTRIPSFluents( STRIPS_Problem& domain );
-	void				evalSTRIPSFluents( aig_tk::Fluent_Vec& eval );
+	void				evalSTRIPSFluents( aptk::Fluent_Vec& eval );
 
 public slots:
 

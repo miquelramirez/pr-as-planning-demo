@@ -100,7 +100,7 @@ void	StageProp::makeSTRIPSActions( STRIPS_Problem& domain, Planning::Observer* o
 	}	
 }
 
-void	StageProp::evalSTRIPSFluents( aig_tk::Fluent_Vec& eval )
+void	StageProp::evalSTRIPSFluents( aptk::Fluent_Vec& eval )
 {
 	typedef QMap< QString, bool >::iterator Iterator;
 

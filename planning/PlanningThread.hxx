@@ -2,9 +2,9 @@
 #define __PLANNING_THREAD__
 
 #include <QThread>
-#include <planning/STRIPS_Problem.hxx>
+#include <strips_prob.hxx>
 
-using aig_tk::STRIPS_Problem;
+using aptk::STRIPS_Problem;
 
 
 namespace Planning
@@ -18,7 +18,7 @@ public:
 	PlanningThread( STRIPS_Problem& prob );
 	virtual ~PlanningThread();
 
-	aig_tk::Cost_Type	result() const { return mCost; }
+	aptk::Cost_Type	result() const { return mCost; }
 
 protected:
 
@@ -29,7 +29,7 @@ protected:
 protected:
 
 	STRIPS_Problem&		mProblem;
-	aig_tk::Cost_Type	mCost;
+	aptk::Cost_Type	mCost;
 };
 
 }

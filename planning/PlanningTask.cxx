@@ -1,11 +1,11 @@
 #include <planning/PlanningTask.hxx>
 #include <limits>
-#include <planning/Types.hxx>
+#include <types.hxx>
 #include <search/Node.hxx>
 #include <planning/Single_Queue_FF_BFS.hxx>
-#include <util/time.hxx>
-#include <util/ext_math.hxx>
-#include <planning/inference/Reachability_Test.hxx>
+#include <aptk/time.hxx>
+#include <aptk/ext_math.hxx>
+#include <reachability.hxx>
 
 using aig_tk::Fluent_Vec;
 

@@ -60,7 +60,7 @@ void	Agent::makeSTRIPSFluents( STRIPS_Problem& domain )
 	}
 }
 
-void	Agent::evalSTRIPSFluents( aig_tk::Fluent_Vec& eval )
+void	Agent::evalSTRIPSFluents( aptk::Fluent_Vec& eval )
 {
 	if ( canWalk() )
 		eval.push_back( mCanWalkFluent->index() );

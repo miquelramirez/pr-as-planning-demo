@@ -6,11 +6,11 @@
 #include <QMap>
 #include <QString>
 #include <QVector>
-#include <planning/STRIPS_Problem.hxx>
-#include <planning/Fluent.hxx>
+#include <strips_prob.hxx>
+#include <fluent.hxx>
 
-using aig_tk::STRIPS_Problem;
-using aig_tk::Fluent;
+using aptk::STRIPS_Problem;
+using aptk::Fluent;
 
 namespace Planning
 {
@@ -41,7 +41,7 @@ public:
 
 	void				makeSTRIPSFluents( STRIPS_Problem& domain );
 	void				makeSTRIPSActions( STRIPS_Problem& domain, Planning::Observer* obs );
-	void				evalSTRIPSFluents( aig_tk::Fluent_Vec& eval );
+	void				evalSTRIPSFluents( aptk::Fluent_Vec& eval );
 
 	static	bool			load( const QDomElement& elem, StageProp* obj );
 

@@ -1,5 +1,5 @@
 #include <planning/Observer.hxx>
-#include <planning/Action.hxx>
+#include <action.hxx>
 #include <cstdlib>
 #include <iostream>
 #include <widgets/GoalView.hxx>
@@ -32,7 +32,7 @@ void	Observer::start()
 	emit requestInitialStateUpdate();	
 }
 
-void	Observer::updateInitialState( aig_tk::Fluent_Vec& eval )
+void	Observer::updateInitialState( aptk::Fluent_Vec& eval )
 {
 	mInitialState = eval;
 	
@@ -61,7 +61,7 @@ void	Observer::actionExecuted( unsigned index )
 	
 	if ( rX >= obsLevel() ) return;
 
-	aig_tk::Action*	obs = mDomain.actions()[index];
+	aptk::Action*	obs = mDomain.actions()[index];
 	
 	emit actionObserved( QString( obs->signature().c_str() ) );	
 	mObservations.push_back( obs );
@@ -99,12 +99,12 @@ void	Observer::actionExecuted( unsigned index )
 
 void	Observer::addNewGoal( QString label, QList< QString >& fluents  )
 {
-	aig_tk::Fluent_Vec fluentVec;
+	aptk::Fluent_Vec fluentVec;
 	std::cout << "Creating new hypothetic goal" << std::endl;
 	
 	for ( int i = 0; i < fluents.size(); i++ )
 	{
-		unsigned f = mDomain.getFluentIndex( fluents[i].toStdString() );
+		unsigned f = mDomain.get_fluent_index( fluents[i].toStdString() );
 		std::cout << "Fluent in goal: " << fluents[i].toStdString() << " " << f << std::endl;
 		fluentVec.push_back( f );
 	}	

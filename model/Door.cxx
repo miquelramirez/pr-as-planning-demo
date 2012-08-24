@@ -74,7 +74,7 @@ void	Door::makeSTRIPSFluents( STRIPS_Problem& domain )
 	mClosedFluent = domain.fluents()[index];
 }
 
-void	Door::evalSTRIPSFluents( aig_tk::Fluent_Vec& eval )
+void	Door::evalSTRIPSFluents( aptk::Fluent_Vec& eval )
 {
 	if ( isOpen() ) 
 		eval.push_back( openFluent()->index() );

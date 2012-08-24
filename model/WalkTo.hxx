@@ -2,14 +2,14 @@
 #define __WALK_TO__
 
 #include <QObject>
-#include <planning/STRIPS_Problem.hxx>
-#include <planning/Fluent.hxx>
-#include <planning/Action.hxx>
+#include <strips_prob.hxx>
+#include <fluent.hxx>
+#include <action.hxx>
 
-using aig_tk::STRIPS_Problem;
-using aig_tk::Fluent;
-using aig_tk::Fluent_Ptr_Vec;
-using aig_tk::Action;
+using aptk::STRIPS_Problem;
+using aptk::Fluent;
+using aptk::Fluent_Ptr_Vec;
+using aptk::Action;
 
 namespace Application
 {

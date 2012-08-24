@@ -1,5 +1,5 @@
 #include <planning/Goal.hxx>
-#include <planning/Fluent.hxx>
+#include <fluent.hxx>
 
 namespace Planning
 {

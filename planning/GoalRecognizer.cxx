@@ -1,18 +1,47 @@
 #include <planning/GoalRecognizer.hxx>
 #include <QString>
 #include <iostream>
+#include <sstream>
 #include <limits>
-#include <planning/Types.hxx>
-#include <search/Node.hxx>
-#include <planning/Single_Queue_FF_BFS.hxx>
-#include <util/time.hxx>
-#include <util/ext_math.hxx>
-#include <planning/inference/Reachability_Test.hxx>
-#include <planning/PlanningThread.hxx>
+#include <types.hxx>
+#include <aptk/resources_control.hxx>
+#include <aptk/ext_math.hxx>
+#include <reachability.hxx>
+//#include <planning/PlanningThread.hxx>
+
+#include <strips_state.hxx>
+#include <fwd_search_prob.hxx>
+#include <h_1.hxx>
+#include <rp_heuristic.hxx>
+#include <simple_landmarks.hxx>
+#include <aptk/open_list.hxx>
+#include <aptk/at_rwbfs_dq_mh.hxx>
 
 namespace Planning
 {
 
+using	aptk::State;
+using	aptk::agnostic::Fwd_Search_Problem;
+
+using 	aptk::agnostic::H1_Heuristic;
+using	aptk::agnostic::H_Add_Evaluation_Function;
+using	aptk::agnostic::Relaxed_Plan_Heuristic;
+using	aptk::agnostic::Simple_Landmarks_Heuristic;
+
+using	aptk::agnostic::Reachability_Test;
+
+using 	aptk::search::Open_List;
+using	aptk::search::Node_Comparer_DH;
+using 	aptk::search::bfs_dq_mh::Node;
+using	aptk::search::bfs_dq_mh::AT_RWBFS_DQ_MH;
+
+typedef		Node< State >									Search_Node;
+typedef		Node_Comparer_DH< Search_Node >							Tie_Breaking_Algorithm;
+typedef		Open_List< Tie_Breaking_Algorithm, Search_Node >				BFS_Open_List;
+typedef		H1_Heuristic<Fwd_Search_Problem, H_Add_Evaluation_Function>			H_Add_Fwd;
+typedef		Relaxed_Plan_Heuristic< Fwd_Search_Problem, H_Add_Fwd >				H_Add_Rp_Fwd;
+typedef		Simple_Landmarks_Heuristic< Fwd_Search_Problem >				H_LM;
+typedef		AT_RWBFS_DQ_MH< Fwd_Search_Problem, H_Add_Rp_Fwd, H_LM, BFS_Open_List >		Anytime_RWBFS_H_Add_Rp_Fwd;
 
 GoalRecognizer::GoalRecognizer(  STRIPS_Problem& p, Goal& g, Action_Ptr_Vec& obs, Fluent_Vec& init )
 	: mBeta( 1.0f ), mHypGoal( g ), mObsSequence(obs), mInitialState( init ), mOriginalProblem( p ),
@@ -27,6 +56,16 @@ GoalRecognizer::GoalRecognizer(  STRIPS_Problem& p, Goal& g, Action_Ptr_Vec& obs
 	setGoals(mNotCompliantProblem, mNotObsFluentsNotComp);
 	mCompliantProblem.make_action_tables();
 	mNotCompliantProblem.make_action_tables();
+
+	std::stringstream comp_sstr;
+	comp_sstr << mHypGoal.name().toStdString();
+	comp_sstr << ".comp.log";
+	mLogFileComp = comp_sstr.str();
+	
+	std::stringstream not_comp_sstr;
+	not_comp_sstr << mHypGoal.name().toStdString();
+	not_comp_sstr << ".not-comp.log";
+	mLogFileNotComp = not_comp_sstr.str();
 }
 
 GoalRecognizer::~GoalRecognizer()
@@ -117,7 +156,7 @@ void	GoalRecognizer::createActions(STRIPS_Problem& prob, Fluent_Ptr_Vec& obsFlue
 
 
 		STRIPS_Problem::add_action( 	prob, actOrig->signature(),
-								precs, adds, dels, ceffs );
+						precs, adds, dels, ceffs );
 
 	}
 }
@@ -166,7 +205,7 @@ void	GoalRecognizer::evaluateLikelihoods()
 	assert( checkReachability( mCompliantProblem ) );
 	assert( checkReachability( mNotCompliantProblem ) );
 
-	mObsCompliantCost = solve( mCompliantProblem );
+	mObsCompliantCost = solve( mCompliantProblem, mLogFileComp );
 	/*
 	PlanningThread*	compThread = new PlanningThread( mCompliantProblem );
 	QObject::connect( compThread, SIGNAL( finished() ), this, SLOT( notifyCompFinished() ) );
@@ -178,10 +217,10 @@ void	GoalRecognizer::evaluateLikelihoods()
 	std::cout << "c(P[G+O])=" << mObsCompliantCost << std::endl;
 
 	if ( !checkSolvable( mNotCompliantProblem ) )
-		mNotObsCompliantCost = std::numeric_limits<aig_tk::Cost_Type>::infinity();
+		mNotObsCompliantCost = infty;
 	else
 	{
-		mNotObsCompliantCost = solve( mNotCompliantProblem );
+		mNotObsCompliantCost = solve( mNotCompliantProblem, mLogFileNotComp );
 		//notCompThread->start();
 	}
 	std::cout << "c(P[G+\\overline{O}])=" << mNotObsCompliantCost << std::endl;
@@ -195,15 +234,15 @@ void	GoalRecognizer::evaluateLikelihoods()
 	delete notCompThread;
 	*/
 
-	assert( mObsCompliantCost != std::numeric_limits<aig_tk::Cost_Type>::infinity()
-		|| mNotObsCompliantCost !=  std::numeric_limits<aig_tk::Cost_Type>::infinity() );
+	assert( mObsCompliantCost != std::numeric_limits<aptk::Cost_Type>::infinity()
+		|| mNotObsCompliantCost !=  std::numeric_limits<aptk::Cost_Type>::infinity() );
 
-	if ( mObsCompliantCost == std::numeric_limits<aig_tk::Cost_Type>::infinity() )
+	if ( mObsCompliantCost == std::numeric_limits<aptk::Cost_Type>::infinity() )
 	{
 		mObsCompliantLikelihood = 0.0f;
 		mNotObsCompliantLikelihood = 1.0f;
 	}
-	else if ( mNotObsCompliantCost == std::numeric_limits<aig_tk::Cost_Type>::infinity() )
+	else if ( mNotObsCompliantCost == std::numeric_limits<aptk::Cost_Type>::infinity() )
 	{
 		mObsCompliantLikelihood = 1.0f;
 		mNotObsCompliantLikelihood = 0.0f;
@@ -228,7 +267,7 @@ void	GoalRecognizer::printFluentVec( STRIPS_Problem& prob, Fluent_Vec& v )
 	}	
 }
 
-void	GoalRecognizer::printState( STRIPS_Problem& prob, aig_tk::State& s )
+void	GoalRecognizer::printState( STRIPS_Problem& prob, aptk::State& s )
 {
 	printFluentVec( prob, s.fluent_vec() );
 }
@@ -279,13 +318,13 @@ void	GoalRecognizer::printPlan( STRIPS_Problem& prob, std::vector<Action*>& plan
 
 bool	GoalRecognizer::checkReachability( STRIPS_Problem& prob )
 {
-	aig_tk::Reachability_Test	rtest( prob );
+	Reachability_Test	rtest( prob );
 	return rtest.is_reachable( prob.init(), prob.goal() );
 }
 
 bool	GoalRecognizer::checkSolvable( STRIPS_Problem& prob )
 {
-	aig_tk::Reachability_Test	rtest( prob );
+	Reachability_Test	rtest( prob );
 	
 	if (rtest.is_reachable( mInitialState, mHypGoal.fluents(), mObsSequence.back()->index() ) )
 		return true;
@@ -300,58 +339,58 @@ bool	GoalRecognizer::checkSolvable( STRIPS_Problem& prob )
 	return false;
 }
 
-float	GoalRecognizer::solve( STRIPS_Problem& prob )
+float	GoalRecognizer::solve( STRIPS_Problem& plan_prob, std::string logfile )
 {
-	float t0, tf;
-
-	t0 = time_used();
-	aig_tk::Node* n0 = aig_tk::Node::root( prob );
-	std::vector<aig_tk::Node*> plan;
-	std::vector<Action*>	best_plan;
-	aig_tk::Single_Queue_FF_BFS engine;
-	engine.init( prob, n0 );
-	engine.start();
-	float maxTime = 0.1f;
-	float runningTime = 0.0f;	
-
-	aig_tk::Cost_Type best = std::numeric_limits<aig_tk::Cost_Type>::infinity();
-	bool solved;
-	do
-	{
-		plan.clear();
-		engine.set_budget( maxTime - runningTime );
-		solved = engine.findSolution(plan);
-		tf = time_used();
-		std::cout << "Plan computed:"; report_interval( t0, tf, std::cout ); std::cout << std::endl;
+	Fwd_Search_Problem		search_prob( &plan_prob );
+	Anytime_RWBFS_H_Add_Rp_Fwd	engine( search_prob );
 	
-		if( solved )
-		{
-			aig_tk::Cost_Type plan_cost = 0.0f;
-			aig_tk::State* s0 = n0->s();
-			std::vector< aig_tk::State* > trace;
-			aig_tk::State* current = s0;
-			for ( unsigned k = 0; k < plan.size(); k++ )
-			{
-				Action* a = plan[k]->op();
-				assert(  current->entails(a->prec_vec()) );
-				plan_cost = aig_tk::add( plan_cost, a->cost() );
-				current = current->progress_through( *a );
-				trace.push_back( current );
-			}
-			for ( unsigned k = 0; k < trace.size(); k++ )
-				delete trace[k];
-			best = plan_cost;
-			best_plan.clear();
-			for ( unsigned k = 0; k < plan.size(); k++ )
-				best_plan.push_back( plan[k]->op() );
+	engine.set_schedule( 10, 5, 1 );
+
+	
+	std::ofstream out( logfile.c_str() );
+
+	engine.set_budget( 0.1f );
+	engine.start();
+
+	std::vector< aptk::Action_Idx > plan;
+	float				cost;
+
+	float ref = aptk::time_used();
+	float t0 = aptk::time_used();
+
+	unsigned expanded_0 = engine.expanded();
+	unsigned generated_0 = engine.generated();
+
+	while ( engine.find_solution( cost, plan ) ) {
+		out << "Plan found with cost: " << cost << std::endl;
+		for ( unsigned k = 0; k < plan.size(); k++ ) {
+			out << k+1 << ". ";
+			const Action& a = *(plan_prob.actions()[ plan[k] ]);
+			out << a.signature();
+			out << std::endl;
 		}
-		runningTime += (tf - t0);
-		t0 = time_used();
-		std::cout << "Running Time: " << runningTime << std::endl;
-	} while ( solved && ( runningTime <= maxTime ) );
-	std::cout << "Total Running Time: " << runningTime << std::endl;
-	printPlan( prob, best_plan );
-	return best;
+		float tf = aptk::time_used();
+		unsigned expanded_f = engine.expanded();
+		unsigned generated_f = engine.generated();
+		out << "Time: " << tf - t0 << std::endl;
+		out << "Generated: " << generated_f - generated_0 << std::endl;
+		out << "Expanded: " << expanded_f - expanded_0 << std::endl;
+		t0 = tf;
+		expanded_0 = expanded_f;
+		generated_0 = generated_f;
+		plan.clear();
+	}
+	float total_time = aptk::time_used() - ref;
+	out << "Total time: " << total_time << std::endl;
+	out << "Nodes generated during search: " << engine.generated() << std::endl;
+	out << "Nodes expanded during search: " << engine.expanded() << std::endl;
+	out << "Nodes pruned by bound: " << engine.pruned_by_bound() << std::endl;
+	out << "Dead-end nodes: " << engine.dead_ends() << std::endl;
+	out << "Nodes in OPEN replaced: " << engine.open_repl() << std::endl;
+
+	out.close();
+
+	return cost;
 
 }
 

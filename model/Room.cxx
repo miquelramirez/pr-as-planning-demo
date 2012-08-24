@@ -251,7 +251,7 @@ void	Room::makeSTRIPSActions( STRIPS_Problem& domain, Planning::Observer* obs )
 
 }
 
-void	Room::evalSTRIPSFluents( aig_tk::Fluent_Vec& eval )
+void	Room::evalSTRIPSFluents( aptk::Fluent_Vec& eval )
 {
 	// At fluent
 	if ( isAgentHere() ) eval.push_back( atFluent()->index() );

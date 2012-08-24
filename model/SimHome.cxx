@@ -17,8 +17,8 @@ SimHome::SimHome()
 	: mHome( NULL )
 {
 	mObserver = new Planning::Observer( mDomain );
-	QObject::connect( this, SIGNAL(  updateInitialState( aig_tk::Fluent_Vec& ) ),
-			mObserver, SLOT( updateInitialState( aig_tk::Fluent_Vec& ) ) );
+	QObject::connect( this, SIGNAL(  updateInitialState( aptk::Fluent_Vec& ) ),
+			mObserver, SLOT( updateInitialState( aptk::Fluent_Vec& ) ) );
 	QObject::connect( mObserver, SIGNAL( requestInitialStateUpdate() ),
 			this, SLOT( initialStateUpdateRequested() ) );
 }
@@ -70,7 +70,7 @@ void	SimHome::loadHome( const QString& homePath )
 
 void	SimHome::initialStateUpdateRequested()
 {
-	aig_tk::Fluent_Vec evalResult;
+	aptk::Fluent_Vec evalResult;
 	Agent::instance().evalSTRIPSFluents( evalResult );	
 	for ( unsigned k = 0; k < mHome->rooms().size(); k++ )
 		mHome->rooms()[k]->evalSTRIPSFluents( evalResult );

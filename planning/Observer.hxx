@@ -2,15 +2,15 @@
 #define __OBSERVER__
 
 #include <QObject>
-#include <planning/STRIPS_Problem.hxx>
+#include <strips_prob.hxx>
 #include <vector>
 #include <list>
 #include <utility>
 #include <planning/Goal.hxx>
 #include <widgets/GoalView.hxx>
 
-using aig_tk::STRIPS_Problem;
-using aig_tk::Action_Ptr_Vec;
+using aptk::STRIPS_Problem;
+using aptk::Action_Ptr_Vec;
 
 namespace Planning
 {
@@ -37,7 +37,7 @@ public slots:
 	void	stop();
 	void	setObsLevel( float level );
 	void	actionExecuted( unsigned index );
-	void	updateInitialState( aig_tk::Fluent_Vec& eval );
+	void	updateInitialState( aptk::Fluent_Vec& eval );
 	void	addNewGoal( QString label, QList< QString >& fluents );
 	void	removeGoal( QString label );
 	void	onHypGoalsInfoRequested();
@@ -48,7 +48,7 @@ protected:
 	Action_Ptr_Vec		mObservations;
 	bool			mStarted;
 	float			mObsLevel;
-	aig_tk::Fluent_Vec	mInitialState;
+	aptk::Fluent_Vec	mInitialState;
 	std::list< Goal* >	mHypGoals;
 	
 };

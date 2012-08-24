@@ -49,7 +49,7 @@ void	CloseDoor::makeSTRIPSAction( STRIPS_Problem& p )
 	mAddFluents.push_back( mDoor->closedFluent() );
 	mDelFluents.push_back( mDoor->openFluent() );
 
-	aig_tk::Fluent_Vec pre, add, del;
+	aptk::Fluent_Vec pre, add, del;
 	for (unsigned k = 0; k < mPrecFluents.size(); k++ )
 		pre.push_back( mPrecFluents[k]->index() );
 	for (unsigned k = 0; k < mAddFluents.size(); k++ )
@@ -59,7 +59,7 @@ void	CloseDoor::makeSTRIPSAction( STRIPS_Problem& p )
 	assert( !pre.empty() );
 	assert( !add.empty() );
 	assert( !del.empty() );
-	aig_tk::Conditional_Effect_Vec cEffs;
+	aptk::Conditional_Effect_Vec cEffs;
 
 	unsigned actIndex = STRIPS_Problem::add_action( p, signature, pre, add, del, cEffs ); 
 	mSTRIPSAction = p.actions()[actIndex];

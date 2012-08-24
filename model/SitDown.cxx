@@ -39,7 +39,7 @@ void	SitDown::makeSTRIPSAction( STRIPS_Problem& p )
 	adds().push_back( objRef().getPropertyFluent( "sitting" ) );
 	dels().push_back( agentRef().canWalkFluent() );
 
-	aig_tk::Fluent_Vec pre, add, del;
+	aptk::Fluent_Vec pre, add, del;
 	for (unsigned k = 0; k < precs().size(); k++ )
 		pre.push_back( precs()[k]->index() );
 	for (unsigned k = 0; k < adds().size(); k++ )
@@ -50,7 +50,7 @@ void	SitDown::makeSTRIPSAction( STRIPS_Problem& p )
 	assert( !pre.empty() );
 	assert( !add.empty() );
 	assert( !del.empty() );
-	aig_tk::Conditional_Effect_Vec cEffs;
+	aptk::Conditional_Effect_Vec cEffs;
 
 	unsigned actIndex = STRIPS_Problem::add_action( p, signature, pre, add, del, cEffs ); 
 	setSTRIPSAction( p.actions()[actIndex] );

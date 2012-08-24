@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QString>
 #include <QPixmap>
-#include <planning/STRIPS_Problem.hxx>
+#include <strips_prob.hxx>
 
 namespace Planning
 {
@@ -34,14 +34,14 @@ public:
 	SimHome();
 	~SimHome();
 
-	aig_tk::STRIPS_Problem&		planningDomain() { return mDomain; }
+	aptk::STRIPS_Problem&		planningDomain() { return mDomain; }
 	Planning::Observer*		observer() { return mObserver; }
 	
 signals:
 	
 	void	onHomeLoaded( const QPixmap& pic );
 	void	makeRoom( UI::RoomView*	v );
-	void	updateInitialState( aig_tk::Fluent_Vec& eval );
+	void	updateInitialState( aptk::Fluent_Vec& eval );
 
 public slots:
 
@@ -52,7 +52,7 @@ public slots:
 private:
 
 	Home*				mHome;
-	aig_tk::STRIPS_Problem		mDomain;
+	aptk::STRIPS_Problem		mDomain;
 	Planning::Observer*		mObserver;
 };
 
