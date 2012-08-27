@@ -46,7 +46,7 @@ protected:
 	void	createObsFluents(STRIPS_Problem& prob, Fluent_Ptr_Vec& obsFluents, Fluent_Ptr_Vec& notObsFluents);
 	void	createActions( STRIPS_Problem& prob, Fluent_Ptr_Vec& obsFluents, Fluent_Ptr_Vec& notObsFluents );
 
-	float	solve( STRIPS_Problem& prob, std::string log_file );
+	float	solve( STRIPS_Problem& prob, std::ostream& log_file );
 
 	void	printInitAndGoal( STRIPS_Problem& p );
 	void	printState( STRIPS_Problem& p, aptk::State& s );
