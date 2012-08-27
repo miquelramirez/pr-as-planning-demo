@@ -257,8 +257,11 @@ void	Room::evalSTRIPSFluents( aptk::Fluent_Vec& eval )
 	if ( isAgentHere() ) eval.push_back( atFluent()->index() );
 	for ( int k = 0; k < contents().size(); k++ )
 		eval.push_back( atItemFluents()[ contents()[k]->name() ]->index() );
-	for ( int i = 0; i < mStageProps.size(); i++ )
+	for ( int i = 0; i < mStageProps.size(); i++ ) 
+	{
 		eval.push_back( mAtPropFluents[ mStageProps[i]->name() ]->index() );
+		mStageProps[i]->evalSTRIPSFluents( eval );
+	}
 }
 
 void	Room::addItem( Item* i )
