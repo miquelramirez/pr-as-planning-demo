@@ -62,10 +62,25 @@ GoalRecognizer::GoalRecognizer(  STRIPS_Problem& p, Goal& g, Action_Ptr_Vec& obs
 	comp_sstr << ".comp.log";
 	mLogFileComp = comp_sstr.str();
 	
+	std::stringstream comp_sstr2;
+	comp_sstr2 << mHypGoal.name().toStdString();
+	comp_sstr2 << ".comp.strips";
+	std::ofstream outComp( comp_sstr2.str().c_str() );
+	mCompliantProblem.print(outComp );
+	outComp.close();	
+
 	std::stringstream not_comp_sstr;
 	not_comp_sstr << mHypGoal.name().toStdString();
 	not_comp_sstr << ".not-comp.log";
 	mLogFileNotComp = not_comp_sstr.str();
+
+	std::stringstream not_comp_sstr2;
+	not_comp_sstr2 << mHypGoal.name().toStdString();
+	not_comp_sstr2 << "not.comp.strips";
+	std::ofstream outNotComp( not_comp_sstr2.str().c_str() );
+	mCompliantProblem.print(outNotComp );
+	outNotComp.close();	
+
 }
 
 GoalRecognizer::~GoalRecognizer()
@@ -200,12 +215,14 @@ void	GoalRecognizer::evaluateLikelihoods()
 {
 	std::cout << "Evaluating Goal: " << mHypGoal.name().toStdString() << std::endl;
 	printInitAndGoal( mCompliantProblem );
-	printActions( mCompliantProblem );
+	//printActions( mCompliantProblem );
 	printInitAndGoal( mNotCompliantProblem );
 	assert( checkReachability( mCompliantProblem ) );
 	assert( checkReachability( mNotCompliantProblem ) );
 
-	mObsCompliantCost = solve( mCompliantProblem, mLogFileComp );
+	std::ofstream out( mLogFileComp.c_str() );
+	mObsCompliantCost = solve( mCompliantProblem, out );
+	out.close();
 	/*
 	PlanningThread*	compThread = new PlanningThread( mCompliantProblem );
 	QObject::connect( compThread, SIGNAL( finished() ), this, SLOT( notifyCompFinished() ) );
@@ -220,7 +237,9 @@ void	GoalRecognizer::evaluateLikelihoods()
 		mNotObsCompliantCost = infty;
 	else
 	{
-		mNotObsCompliantCost = solve( mNotCompliantProblem, mLogFileNotComp );
+		std::ofstream out2( mLogFileComp.c_str() );
+		mNotObsCompliantCost = solve( mNotCompliantProblem, out2 );
+		out2.close();
 		//notCompThread->start();
 	}
 	std::cout << "c(P[G+\\overline{O}])=" << mNotObsCompliantCost << std::endl;
@@ -339,7 +358,7 @@ bool	GoalRecognizer::checkSolvable( STRIPS_Problem& prob )
 	return false;
 }
 
-float	GoalRecognizer::solve( STRIPS_Problem& plan_prob, std::string logfile )
+float	GoalRecognizer::solve( STRIPS_Problem& plan_prob, std::ostream& out )
 {
 	Fwd_Search_Problem		search_prob( &plan_prob );
 	Anytime_RWBFS_H_Add_Rp_Fwd	engine( search_prob );
@@ -347,7 +366,6 @@ float	GoalRecognizer::solve( STRIPS_Problem& plan_prob, std::string logfile )
 	engine.set_schedule( 10, 5, 1 );
 
 	
-	std::ofstream out( logfile.c_str() );
 
 	engine.set_budget( 0.1f );
 	engine.start();
@@ -387,8 +405,6 @@ float	GoalRecognizer::solve( STRIPS_Problem& plan_prob, std::string logfile )
 	out << "Nodes pruned by bound: " << engine.pruned_by_bound() << std::endl;
 	out << "Dead-end nodes: " << engine.dead_ends() << std::endl;
 	out << "Nodes in OPEN replaced: " << engine.open_repl() << std::endl;
-
-	out.close();
 
 	return cost;
 
