@@ -81,14 +81,14 @@ void	Observer::actionExecuted( unsigned index )
 		it != mHypGoals.end(); it++ )
 	{
 		recognizers.push_back( new GoalRecognizer( mDomain, **it, mObservations, mInitialState ) ); 
-		//recognizers.back()->getTasks( tasks );
+		recognizers.back()->getTasks( tasks );
 	}
 
-	//QFuture<void> future = QtConcurrent::map( tasks, PlanningTask::solve );
-	//future.waitForFinished();
+	QFuture<void> future = QtConcurrent::map( tasks, PlanningTask::solve );
+	future.waitForFinished();
 
 	for ( unsigned k = 0; k < recognizers.size(); k++ )
-		recognizers[k]->evaluateLikelihoods();
+		recognizers[k]->evaluateLikelihoodsFromTasks();
 
 	float norm = 0.0f;
 	for ( unsigned k = 0; k < recognizers.size(); k++ )

@@ -41,15 +41,16 @@ typedef		Relaxed_Plan_Heuristic< Fwd_Search_Problem, H_Add_Fwd >				H_Add_Rp_Fwd
 typedef		Simple_Landmarks_Heuristic< Fwd_Search_Problem >				H_LM;
 typedef		AT_RWBFS_DQ_MH< Fwd_Search_Problem, H_Add_Rp_Fwd, H_LM, BFS_Open_List >		Anytime_RWBFS_H_Add_Rp_Fwd;
 
-PlanningTask::PlanningTask( STRIPS_Problem& problem, Action_Ptr_Vec& obs, bool doReachabilityTest )
+PlanningTask::PlanningTask( STRIPS_Problem& problem, Action_Ptr_Vec& obs, std::string logFileName, bool doReachabilityTest )
 	: mProblem( problem ), mObsSequence(obs), mCost( std::numeric_limits<aptk::Cost_Type>::infinity() ),
 	mDoReachabilityTest( doReachabilityTest )
 {
-
+	mLogFile.open( logFileName.c_str() );
 }
 
 PlanningTask::~PlanningTask()
 {
+	mLogFile.close();
 }
 
 aptk::Cost_Type	PlanningTask::result() const
@@ -64,12 +65,12 @@ bool	PlanningTask::doReachabilityTest( )
 	
 	if (rtest.is_reachable( mProblem.init(), mProblem.goal(), mObsSequence.back()->index() ) )
 		return true;
-	for ( unsigned i = 0; i < mObsSequence.size()-1; i++ )
+	for ( int i = mObsSequence.size()-1; i > 0; i-- )
 	{
 	
-		Fluent_Vec& prec_i = mProblem.actions()[mObsSequence[i+1]->index()]->prec_vec();
+		const Fluent_Vec& prec_i = mProblem.actions()[mObsSequence[i]->index()]->prec_vec();
 
-		if( rtest.is_reachable( mProblem.init(), prec_i, mObsSequence[i]->index() ) )
+		if( rtest.is_reachable( mProblem.init(), prec_i, mObsSequence[i-1]->index() ) )
 			return true;
 	}
 	return false;
@@ -83,9 +84,11 @@ void	PlanningTask::solve( PlanningTask* task )
 		if ( !task->doReachabilityTest( ) )
 		{
 			task->mCost = std::numeric_limits<aptk::Cost_Type>::infinity();
+			task->mLogFile << "Reachability Test Failed: Task is not solvable" << std::endl;
 			return;
 		}
 	}
+	task->mLogFile << "Search started" << std::endl;
 	Fwd_Search_Problem		search_prob( &task->mProblem );
 	Anytime_RWBFS_H_Add_Rp_Fwd	engine( search_prob );
 	
@@ -96,8 +99,10 @@ void	PlanningTask::solve( PlanningTask* task )
 	float				cost;
 
 	t0 = aptk::time_used();
-	float maxTime = 0.5f;
+	float maxTime = 3.0f;
 	float runningTime = 0.0f;	
+	unsigned expanded_0 = engine.expanded();
+	unsigned generated_0 = engine.generated();
 
 	bool solved;
 	do
@@ -107,16 +112,25 @@ void	PlanningTask::solve( PlanningTask* task )
 		
 		solved = engine.find_solution(cost, plan);
 		tf = aptk::time_used();
-		std::cout << cost << std::endl;
-		std::cout << "Plan computed:"; aptk::report_interval( t0, tf, std::cout ); std::cout << std::endl;
-	
-		if( solved )
+		float delta = tf - t0;
+		unsigned expanded_f = engine.expanded();
+		unsigned generated_f = engine.generated();
+		if( solved ) {
+			task->mLogFile << "Plan found with cost: " << cost << std::endl;
+			task->mLogFile << "Time: " << delta << std::endl;
 			task->mCost = cost;
-		runningTime += (tf - t0);
+		}
+		else
+			task->mLogFile << "No solution found!" << std::endl;
+		task->mLogFile << "Generated: " << generated_f - generated_0 << std::endl;
+		task->mLogFile << "Expanded: " << expanded_f - expanded_0 << std::endl;
+		expanded_0 = expanded_f;
+		generated_0 = generated_f;
+		runningTime += delta;
 		t0 = aptk::time_used();
-		std::cout << "Running Time: " << runningTime << std::endl;
+		task->mLogFile << "Running Time: " << runningTime << " Remaining Time: " << maxTime - runningTime << std::endl;
 	} while ( solved && ( runningTime <= maxTime ) );
-	std::cout << "Total Running Time: " << runningTime << std::endl;
+	task->mLogFile << "Total Running Time: " << runningTime << std::endl;
 }
 
 }

@@ -80,8 +80,8 @@ GoalRecognizer::GoalRecognizer(  STRIPS_Problem& p, Goal& g, Action_Ptr_Vec& obs
 	std::ofstream outNotComp( not_comp_sstr2.str().c_str() );
 	mCompliantProblem.print(outNotComp );
 	outNotComp.close();	
-	mTaskComp = new PlanningTask(mCompliantProblem, mObsSequence );
-	mTaskNotComp = new PlanningTask( mNotCompliantProblem, mObsSequence );
+	mTaskComp = new PlanningTask(mCompliantProblem, mObsSequence, comp_sstr.str(), false );
+	mTaskNotComp = new PlanningTask( mNotCompliantProblem, mObsSequence, not_comp_sstr.str(), true );
 }
 
 GoalRecognizer::~GoalRecognizer()

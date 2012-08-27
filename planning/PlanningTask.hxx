@@ -4,6 +4,7 @@
 #include <QObject>
 #include <strips_prob.hxx>
 #include <action.hxx>
+#include <fstream>
 
 using aptk::STRIPS_Problem;
 using aptk::Action;
@@ -18,7 +19,7 @@ class	PlanningTask : public QObject
 	Q_OBJECT
 public:
 
-	PlanningTask( STRIPS_Problem& prob, Action_Ptr_Vec& obs, bool doReachabilityTest = false );
+	PlanningTask( STRIPS_Problem& prob, Action_Ptr_Vec& obs, std::string logFileName, bool doReachabilityTest = false );
 	virtual ~PlanningTask();
 
 	aptk::Cost_Type	result() const;
@@ -30,8 +31,9 @@ protected:
 
 	STRIPS_Problem&		mProblem;
 	Action_Ptr_Vec&		mObsSequence;
-	aptk::Cost_Type	mCost;
+	aptk::Cost_Type		mCost;
 	bool			mDoReachabilityTest;
+	std::ofstream		mLogFile;
 };
 
 }
