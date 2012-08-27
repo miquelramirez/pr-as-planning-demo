@@ -43,19 +43,16 @@ bool	StageProp::load(  const QDomElement& root, StageProp* obj )
 	assert( !locElem.isNull() );
 
 	obj->mLocName = locElem.attribute( "name" );
-
 	QDomElement propElem = root.firstChildElement( "Properties" );
 	assert( !propElem.isNull() );
-	QDomElement propElemChild = propElem.firstChildElement();
+	QDomElement propElemChild = propElem.firstChildElement("Property");
 	while ( !propElemChild.isNull() )
 	{
-		if ( propElemChild.tagName() != "Property" ) continue;
-
 		bool initValue = ( propElemChild.attribute("initial").toInt() ? true : false );
 	
-		obj->mProperties[ propElemChild.attribute("name") ] = initValue;	
-
-		propElemChild = propElemChild.nextSiblingElement();
+		obj->mProperties[ propElemChild.attribute("name") ] = initValue;
+			
+		propElemChild = propElemChild.nextSiblingElement("Property");
 	}
 	assert( !obj->mProperties.empty() );
 
