@@ -4,6 +4,8 @@
 #include <iostream>
 #include <widgets/GoalView.hxx>
 #include <planning/GoalRecognizer.hxx>
+#include <planning/PlanningTask.hxx>
+#include <qtconcurrentmap.h>
 
 namespace Planning
 {
@@ -74,9 +76,16 @@ void	Observer::actionExecuted( unsigned index )
 	if ( mHypGoals.empty() ) return;
 
 	std::vector<GoalRecognizer*> recognizers;
+	std::vector<PlanningTask*> tasks;
 	for ( std::list< Goal* >::iterator it = mHypGoals.begin();
 		it != mHypGoals.end(); it++ )
+	{
 		recognizers.push_back( new GoalRecognizer( mDomain, **it, mObservations, mInitialState ) ); 
+		//recognizers.back()->getTasks( tasks );
+	}
+
+	//QFuture<void> future = QtConcurrent::map( tasks, PlanningTask::solve );
+	//future.waitForFinished();
 
 	for ( unsigned k = 0; k < recognizers.size(); k++ )
 		recognizers[k]->evaluateLikelihoods();
