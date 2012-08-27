@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <planning/Goal.hxx>
+#include <planning/PlanningTask.hxx>
 #include <strips_prob.hxx>
 #include <action.hxx>
 #include <fluent.hxx>
@@ -34,7 +35,16 @@ public:
 	float 	obsCompliantLikelihood() const { return mObsCompliantLikelihood; }
 	float	notObsCompliantLikelihood() const { return mNotObsCompliantLikelihood; }
 
+	void	getTasks( std::vector<PlanningTask*>& tasks ) 
+	{
+		tasks.push_back( mTaskComp );
+		tasks.push_back( mTaskNotComp );
+	}
+
 	void	evaluateLikelihoods();
+	
+	void	evaluateLikelihoodsFromTasks();
+
 	bool	checkSolvable( STRIPS_Problem& prob );
 	bool 	checkReachability( STRIPS_Problem& prob );
 protected:
@@ -82,6 +92,8 @@ protected:
 	bool		mFinishedNotComp;
 	std::string	mLogFileComp;
 	std::string	mLogFileNotComp;
+	PlanningTask*	mTaskComp;
+	PlanningTask*	mTaskNotComp;
 };
 
 }

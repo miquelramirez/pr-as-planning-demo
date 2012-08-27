@@ -80,11 +80,14 @@ GoalRecognizer::GoalRecognizer(  STRIPS_Problem& p, Goal& g, Action_Ptr_Vec& obs
 	std::ofstream outNotComp( not_comp_sstr2.str().c_str() );
 	mCompliantProblem.print(outNotComp );
 	outNotComp.close();	
-
+	mTaskComp = new PlanningTask(mCompliantProblem, mObsSequence );
+	mTaskNotComp = new PlanningTask( mNotCompliantProblem, mObsSequence );
 }
 
 GoalRecognizer::~GoalRecognizer()
 {
+	delete mTaskComp;
+	delete mTaskNotComp;
 }
 
 bool	GoalRecognizer::finished()
@@ -209,6 +212,29 @@ void	GoalRecognizer::printInitAndGoal( STRIPS_Problem& p )
 	std::cout << "Goal:" << std::endl;
 	for ( unsigned k = 0; k < p.goal().size(); k++ )
 		std::cout << p.fluents()[p.goal()[k]]->signature() << std::endl;	
+}
+
+void	GoalRecognizer::evaluateLikelihoodsFromTasks()
+{
+	if ( mTaskComp->result() == std::numeric_limits<aptk::Cost_Type>::infinity() )
+	{
+		mObsCompliantLikelihood = 0.0f;
+		mNotObsCompliantLikelihood = 1.0f;
+	}
+	else if ( mTaskNotComp->result() == std::numeric_limits<aptk::Cost_Type>::infinity() )
+	{
+		mObsCompliantLikelihood = 1.0f;
+		mNotObsCompliantLikelihood = 0.0f;
+	}
+	else
+	{
+		mObsCompliantLikelihood = 1.0f / ( 1.0f + expf( -mBeta *( mTaskNotComp->result() - mTaskComp->result() ) ) );
+		mNotObsCompliantLikelihood = 1.0 - mObsCompliantLikelihood;
+	}
+
+	std::cout << "P(O|G)=" << mObsCompliantLikelihood << std::endl;
+	std::cout << "P(\\overline{O}|G)=" << mNotObsCompliantLikelihood << std::endl;
+	
 }
 
 void	GoalRecognizer::evaluateLikelihoods()
@@ -367,11 +393,12 @@ float	GoalRecognizer::solve( STRIPS_Problem& plan_prob, std::ostream& out )
 
 	
 
-	engine.set_budget( 0.1f );
+	engine.set_budget( 3.0f );
 	engine.start();
 
 	std::vector< aptk::Action_Idx > plan;
 	float				cost;
+	float				best_cost = infty;
 
 	float ref = aptk::time_used();
 	float t0 = aptk::time_used();
@@ -380,6 +407,7 @@ float	GoalRecognizer::solve( STRIPS_Problem& plan_prob, std::ostream& out )
 	unsigned generated_0 = engine.generated();
 
 	while ( engine.find_solution( cost, plan ) ) {
+		best_cost = cost;
 		out << "Plan found with cost: " << cost << std::endl;
 		for ( unsigned k = 0; k < plan.size(); k++ ) {
 			out << k+1 << ". ";
@@ -406,7 +434,7 @@ float	GoalRecognizer::solve( STRIPS_Problem& plan_prob, std::ostream& out )
 	out << "Dead-end nodes: " << engine.dead_ends() << std::endl;
 	out << "Nodes in OPEN replaced: " << engine.open_repl() << std::endl;
 
-	return cost;
+	return best_cost;
 
 }
 
