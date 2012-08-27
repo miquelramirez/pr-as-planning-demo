@@ -31,7 +31,7 @@ void	TurnOff::makeSTRIPSAction( STRIPS_Problem& p )
 	assert( objRef().getPropertyFluent( "off" ) != NULL );
 	assert( objRef().getPropertyFluent( "on" ) != NULL );
 	
-	std::string signature = QString( "(TurnOn %1)" ).arg( objRef().name() ).toStdString();
+	std::string signature = QString( "(TurnOff %1)" ).arg( objRef().name() ).toStdString();
 
 	precs().push_back( roomRef().atFluent() );
 	precs().push_back( roomRef().atPropFluents()[ objRef().name() ] );
