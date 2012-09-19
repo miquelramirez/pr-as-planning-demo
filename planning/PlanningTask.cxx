@@ -127,7 +127,7 @@ void	PlanningTask::solve( PlanningTask* task )
 	do
 	{
 		plan.clear();
-		engine.set_budget( maxTime - runningTime );
+		engine.set_budget( maxTime );// - runningTime );
 		
 		solved = engine.find_solution(cost, plan);
 		tf = aptk::time_used();
