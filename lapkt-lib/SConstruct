@@ -1,0 +1,21 @@
+import os
+
+debug = ARGUMENTS.get( 'debug', 0 )
+common_env = Environment(ENV = os.environ)
+
+common_env.Append( CCFLAGS = [ '-Wall', '-std=c++11' ] )
+#common_env.Append( LINKFLAGS = [ '-static' ] )
+
+if int(debug) == 1 :
+        common_env.Append( CCFLAGS = ['-g',  '-DDEBUG' ] )
+elif int(debug) == 2 :
+        common_env.Append( CCFLAGS = ['-g',  '-DNDEBUG' ] )
+else:
+        common_env.Append( CCFLAGS = ['-O3', '-DNDEBUG'] )
+
+Export( 'common_env' )
+
+generic_objs = SConscript('/home/bowman/Sandboxes/LAPKT-public/src/SConscript.aptk')
+agnostic_objs = SConscript('/home/bowman/Sandboxes/LAPKT-public/interfaces/agnostic/SConscript.agnostic')
+
+common_env.StaticLibrary( 'lapkt.a',  generic_objs + agnostic_objs ) 
