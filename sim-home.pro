@@ -7,8 +7,8 @@ TARGET = sim-home
 #CONFIG += debug
 DEPENDPATH += . widgets model planning
 QMAKE_CXXFLAGS += -std=c++0x
-INCLUDEPATH += . widgets model planning /home/bowman/Sandboxes/lwaptk/include /home/bowman/Sandboxes/lwaptk/interfaces/agnostic
-LIBS += -L/home/bowman/Sandboxes/lwaptk -laptk -L/home/bowman/Sandboxes/lwaptk/interfaces/agnostic -laptk-base
+INCLUDEPATH += . widgets model planning /home/bowman/Sandboxes/LAPKT-public/include /home/bowman/Sandboxes/LAPKT-public/interfaces/agnostic
+LIBS += -L./lapkt-lib -llapkt 
 QT += xml
 
 # Input

@@ -27,10 +27,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <fwd_search_prob.hxx>
 #include <h_1.hxx>
 #include <rp_heuristic.hxx>
-#include <simple_landmarks.hxx>
 #include <reachability.hxx>
 #include <aptk/open_list.hxx>
-#include <aptk/at_rwbfs_dq_mh.hxx>
+#include <aptk/at_rwbfs_dq.hxx>
 
 using aptk::Fluent_Vec;
 
@@ -43,25 +42,25 @@ using	aptk::agnostic::Fwd_Search_Problem;
 using 	aptk::agnostic::H1_Heuristic;
 using	aptk::agnostic::H_Add_Evaluation_Function;
 using	aptk::agnostic::Relaxed_Plan_Heuristic;
-using	aptk::agnostic::Simple_Landmarks_Heuristic;
 
 using	aptk::agnostic::Reachability_Test;
 
 using 	aptk::search::Open_List;
-using	aptk::search::Node_Comparer_DH;
-using 	aptk::search::bfs_dq_mh::Node;
-using	aptk::search::bfs_dq_mh::AT_RWBFS_DQ_MH;
+using	aptk::search::Node_Comparer;
+using 	aptk::search::bfs_dq::Node;
+using	aptk::search::bfs_dq::AT_RWBFS_DQ_SH;
 
 typedef		Node< State >									Search_Node;
-typedef		Node_Comparer_DH< Search_Node >							Tie_Breaking_Algorithm;
+typedef		Node_Comparer< Search_Node >							Tie_Breaking_Algorithm;
 typedef		Open_List< Tie_Breaking_Algorithm, Search_Node >				BFS_Open_List;
 typedef		H1_Heuristic<Fwd_Search_Problem, H_Add_Evaluation_Function>			H_Add_Fwd;
 typedef		Relaxed_Plan_Heuristic< Fwd_Search_Problem, H_Add_Fwd >				H_Add_Rp_Fwd;
-typedef		Simple_Landmarks_Heuristic< Fwd_Search_Problem >				H_LM;
-typedef		AT_RWBFS_DQ_MH< Fwd_Search_Problem, H_Add_Rp_Fwd, H_LM, BFS_Open_List >		Anytime_RWBFS_H_Add_Rp_Fwd;
+typedef		AT_RWBFS_DQ_SH< Fwd_Search_Problem, H_Add_Rp_Fwd, BFS_Open_List >		Anytime_RWBFS_H_Add_Rp_Fwd;
+
+const		float infinity = std::numeric_limits<float>::max();
 
 PlanningTask::PlanningTask( STRIPS_Problem& problem, Action_Ptr_Vec& obs, std::string logFileName, bool doReachabilityTest )
-	: mProblem( problem ), mObsSequence(obs), mCost( std::numeric_limits<aptk::Cost_Type>::infinity() ),
+	: mProblem( problem ), mObsSequence(obs), mCost( infinity ),
 	mDoReachabilityTest( doReachabilityTest )
 {
 	mLogFile.open( logFileName.c_str() );
@@ -72,7 +71,7 @@ PlanningTask::~PlanningTask()
 	mLogFile.close();
 }
 
-aptk::Cost_Type	PlanningTask::result() const
+float	PlanningTask::result() const
 {
 	return mCost;
 }
@@ -102,7 +101,7 @@ void	PlanningTask::solve( PlanningTask* task )
 	{
 		if ( !task->doReachabilityTest( ) )
 		{
-			task->mCost = std::numeric_limits<aptk::Cost_Type>::infinity();
+			task->mCost = infinity;
 			task->mLogFile << "Reachability Test Failed: Task is not solvable" << std::endl;
 			return;
 		}
@@ -111,7 +110,7 @@ void	PlanningTask::solve( PlanningTask* task )
 	Fwd_Search_Problem		search_prob( &task->mProblem );
 	Anytime_RWBFS_H_Add_Rp_Fwd	engine( search_prob );
 	
-	engine.set_schedule( 10, 5, 1 );
+	engine.set_schedule( 10, 5);
 	engine.start();
 	float t0, tf;
 	std::vector< aptk::Action_Idx > plan;

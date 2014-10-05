@@ -41,7 +41,7 @@ public:
 	PlanningTask( STRIPS_Problem& prob, Action_Ptr_Vec& obs, std::string logFileName, bool doReachabilityTest = false );
 	virtual ~PlanningTask();
 
-	aptk::Cost_Type	result() const;
+	float	result() const;
 	
 	bool			doReachabilityTest();
 	static void		solve( PlanningTask* task );
@@ -50,7 +50,7 @@ protected:
 
 	STRIPS_Problem&		mProblem;
 	Action_Ptr_Vec&		mObsSequence;
-	aptk::Cost_Type		mCost;
+	float			mCost;
 	bool			mDoReachabilityTest;
 	std::ofstream		mLogFile;
 };
